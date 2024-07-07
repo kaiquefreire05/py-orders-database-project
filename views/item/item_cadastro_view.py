@@ -42,15 +42,18 @@ class CadastroItemView:
         tk.Button(self.root, text="Voltar", command=self.voltar).grid(row=5, column=0, columnspan=2)
 
     def cadastrar_item(self):
-        # Obtendo os valores
-        nome = self.entrada_nome.get()
-        descricao = self.entrada_desc.get()
-        preco = float(self.entrada_preco.get())
-        qtde = int(self.entrada_qtde.get())
+        try:
+            # Obtendo os valores
+            nome = self.entrada_nome.get()
+            descricao = self.entrada_desc.get()
+            preco = float(self.entrada_preco.get())
+            qtde = int(self.entrada_qtde.get())
 
-        item = Item(nome=nome, descricao=descricao, preco=preco, quantidade=qtde)
-        self.item_controller.cadastrar_item(item)
-        messagebox.showinfo("Sucesso!", "Item cadastrado com sucesso!")
+            item = Item(nome=nome, descricao=descricao, preco=preco, quantidade=qtde)
+            self.item_controller.cadastrar_item(item)
+            messagebox.showinfo("Sucesso!", "Item cadastrado com sucesso!")
+        except ValueError:
+            messagebox.showerror("Erro", "Digite os valores nos campos corretamente")
 
     def voltar(self):
         self.root.destroy()  # Fecha a janela de registro de item

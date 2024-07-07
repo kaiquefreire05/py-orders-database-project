@@ -1,5 +1,6 @@
 import tkinter as tk
 from controllers.item_controller import ItemController
+from tkinter import messagebox
 
 
 class ExcluirItemView:
@@ -15,10 +16,10 @@ class ExcluirItemView:
         self.root.grid_columnconfigure(0, weight=1)
         self.root.grid_columnconfigure(1, weight=1)
 
-        tk.Label(self.root, text="Digite o ID do pedido para ser excluído:").grid(row=0, column=0, sticky='e'
-                                                                                  , padx=10, pady=5)
+        tk.Label(self.root, text="Digite o ID do pedido para ser excluído:").grid(row=2, column=0, sticky='e'
+                                                                                  , padx=10, pady=10)
         self.entry_id = tk.Entry(self.root)
-        self.entry_id.grid(row=0, column=1, sticky='w', padx=10, pady=5)
+        self.entry_id.grid(row=2, column=1, sticky='w', padx=10, pady=10)
 
         # Botão
         tk.Button(self.root, text="Excluir item", command=self.confirmar_exclusao).grid(row=5, column=0
@@ -26,10 +27,30 @@ class ExcluirItemView:
         tk.Button(self.root, text="Voltar", command=self.voltar).grid(row=6, column=0, columnspan=2)
 
     def confirmar_exclusao(self):
-        return
+        item_id = self.entry_id.get()
 
-    def excluir_item(self):
-        return
+        # Verificando se alguma coisa foi inserida
+        if not item_id:
+            messagebox.showerror("Erro", "Informe o ID do item")
+            return
+
+        # Verificando a resposta
+        resposta = messagebox.askyesno("Confirmação", f"Tem certeza que deseja remover o item com o ID {item_id}?")
+        if resposta:
+            self.excluir_item(item_id)
+
+    def excluir_item(self, item_id):
+        try:
+            # Converte o item_id para inteiro
+            item_id = int(item_id)
+            # Tenta excluir o item e verifica o retorno
+            sucesso = self.item_controller.excluir_item(item_id)
+            if sucesso:
+                messagebox.showinfo("Sucesso", "O item foi excluído com sucesso.")
+            else:
+                messagebox.showerror("Erro", f"Não existe item com o ID {item_id}.")
+        except ValueError:
+            messagebox.showerror("Erro", "ID do item inválido.")
 
     def voltar(self):
         self.root.destroy()
