@@ -30,14 +30,17 @@ class PedidoController:
             self.db.execute_query(query_item_pedido, params_item)
 
     def excluir_pedido(self, id):
-        # Excluindo na tabela itens de pedido
 
-        query = 'DELETE FROM itens_pedido WHERE pedido_id = ?'
-        self.db.execute_query(query, (id,))
+        # Excluindo na tabela itens de pedido
+        query_itens_pedido = 'DELETE FROM itens_pedido WHERE pedido_id = ?'
+        result_itens_pedido = self.db.execute_query(query_itens_pedido, (id,))
 
         # Excluindo na tabela pedido
         query_delete_pedido = 'DELETE FROM pedidos WHERE id = ?'
-        self.db.execute_query(query_delete_pedido, (id,))
+        result_pedido = self.db.execute_query(query_delete_pedido, (id,))
+
+        # Verifica se algum registro foi deletado nas duas tabelas
+        return result_itens_pedido.rowcount > 0 or result_pedido.rowcount > 0
 
     def listar_pedidos(self):
 

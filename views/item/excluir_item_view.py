@@ -17,9 +17,9 @@ class ExcluirItemView:
         self.root.grid_columnconfigure(1, weight=1)
 
         tk.Label(self.root, text="Digite o ID do pedido para ser excluído:").grid(row=2, column=0, sticky='e'
-                                                                                  , padx=10, pady=10)
+                                                                                  , padx=10, pady=5)
         self.entry_id = tk.Entry(self.root)
-        self.entry_id.grid(row=2, column=1, sticky='w', padx=10, pady=10)
+        self.entry_id.grid(row=2, column=1, sticky='w', padx=10, pady=5)
 
         # Botão
         tk.Button(self.root, text="Excluir item", command=self.confirmar_exclusao).grid(row=5, column=0
