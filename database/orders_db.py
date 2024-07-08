@@ -47,6 +47,11 @@ class Database:
         self.cursor.execute(query, params)
         self.connection.commit()  # Confirmando a alteração
 
+    def execute_query_with_affected_rows(self, query, params=()):
+        self.cursor.execute(query, params)
+        self.connection.commit()
+        return self.cursor.rowcount  # Retornando com o número de linhas afetadas
+
     def fetch_all(self, query, params=()):
         self.cursor.execute(query, params)
         return self.cursor.fetchall()

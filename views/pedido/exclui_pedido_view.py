@@ -21,7 +21,7 @@ class ExcluiPedidoView:
                                                                 , sticky='e')
         self.entry_id = tk.Entry(self.root)
         self.entry_id.grid(row=2, column=1, sticky='w', padx=10, pady=5)
-        tk.Button(self.root, text="Excluir pedido", command=self.confirmar_exclusao).grid(row=3, column=1, padx=10
+        tk.Button(self.root, text="Excluir pedido", command=self.confirmar_exclusao).grid(row=3, column=0, padx=10
                                                                                           , columnspan=2, pady=10)
         tk.Button(self.root, text="Voltar", command=self.voltar).grid(row=4, column=0, columnspan=2)
 
