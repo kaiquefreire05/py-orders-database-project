@@ -78,3 +78,24 @@ class PedidoController:
         for item in itens:
             params_item_pedido = (id, item.item_id, item.quantidade)
             self.db.execute_query(query_item_pedido, params_item_pedido)
+
+    def carrega_pedido(self, id):
+        query_pedido = 'SELECT data_pedido FROM pedidos WHERE id = ?'
+        pedido_data = self.db.fetch_all(query_pedido, (id,))
+
+        # Se o pedido for vazio retornar None
+        if not pedido_data:
+            return None, None
+
+        # Recuperando os itens
+        query_itens = 'SELECT produto_id, quantidade FROM itens_pedido WHERE pedido_id = ?'
+        itens_data = self.db.fetch_all(query_itens, (id,))
+
+        # Assumindo que fetch_all retorna uma lista de tuplas
+        if pedido_data:
+            data_pedido = pedido_data[0][0]  # Acessa o primeiro elemento da primeira tupla
+            pedido = Pedido(data_pedido=data_pedido)
+            itens = [(item[0], item[1]) for item in itens_data]
+            return pedido, itens
+        return None, None
+

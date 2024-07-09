@@ -27,7 +27,7 @@ class MostrarPedidosView:
         tk.Button(self.root, text="Voltar", command=self.voltar).grid(row=5, column=1, pady=10)
 
     def mostrar_pedidos(self):
-        self.list_box_pedidos.delete(0, tk.END)
+        self.list_box_pedidos.delete(0, tk.END)  # Deletando todos os componentes da ListBox
 
         pedidos = self.pedido_controller.listar_pedidos()
 
