@@ -1,13 +1,14 @@
 import sqlite3
-
 from database.orders_db import Database
 from models.pedido import Pedido
 from models.item_pedido import ItemPedido
+from controllers.item_controller import ItemController
 
 
 class PedidoController:
     def __init__(self):
         self.db = Database()
+        self.item_controller = ItemController()
 
     def registrar_pedido(self, pedido, itens):
         query_pedido = ('''
@@ -25,9 +26,25 @@ class PedidoController:
                     VALUES (?, ?, ?)
                     ''')
 
+        query_update_item = '''
+                    UPDATE itens
+                    SET quantidade = quantidade - ?
+                    WHERE id = ? AND quantidade >= ?
+                '''
+
         for item in itens:
+            # Verificando se o item existe na tabela de itens
+            item_data = self.item_controller.obter_item(item.item_id)
+            if not item_data or item_data[0][4] < item.quantidade:
+                raise ValueError(f'Item com ID {item.item_id} não existe ou quantidade insuficiente.')
+
+            # Inserindo o item do pedido
             params_item = (pedido_id, item.item_id, item.quantidade)
             self.db.execute_query(query_item_pedido, params_item)
+
+            # Atualizando a quantidade do item no estoque
+            params_update_item = (item.quantidade, item.item_id, item.quantidade)
+            self.db.execute_query(query_update_item, params_update_item)
 
     def excluir_pedido(self, id):
 

@@ -43,7 +43,6 @@ class Database:
         self.connection.commit()  # Executando a mudança
 
     def execute_query(self, query, params=()):
-
         self.cursor.execute(query, params)
         self.connection.commit()  # Confirmando a alteração
 

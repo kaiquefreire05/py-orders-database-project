@@ -1,5 +1,6 @@
 import tkinter as tk
 from controllers.pedido_controller import PedidoController
+from controllers.item_controller import ItemController
 from tkinter import messagebox
 from tkcalendar import DateEntry
 from models.pedido import Pedido
@@ -11,6 +12,7 @@ class CadastroPedidoView:
         self.root = root
         self.main_root = main_root
         self.pedido_controller = PedidoController()
+        self.item_controller = ItemController()
         self.root.title("Cadastro de Pedido")
         self.root.geometry("400x400")
         self.itens_pedido = list()
@@ -93,12 +95,20 @@ class CadastroPedidoView:
         for item_widgets in self.itens_pedido:
             if item_widgets:
                 item_id, qtde_item, _ = item_widgets
+                # Tentando obter os valores do tipo correto e criar objeto
                 try:
                     item_id = int(item_id.get())  # Obtendo ID
                     qtde_item = int(qtde_item.get())  # Obtendo quantidade do produto
+
+                    # Verificando se o item existe
+                    item_data = self.item_controller.obter_item(item_id)
+                    if not item_data:
+                        messagebox.showerror("Erro", f"Item com ID {item_id} não existe.")
+                        return
+
                     item_pedido = ItemPedido(item_id, qtde_item, data_pedido)  # Criando objeto ItemPedido
                     itens_pedido.append(item_pedido)  # Adicionado na lista de itens de pedido
-
+                # Se na tentativa ocorrer erro, lança exceção
                 except ValueError:
                     messagebox.showerror("Erro", "IDs e quantidade precisam ser inteiros")
                     return
@@ -112,6 +122,8 @@ class CadastroPedidoView:
         try:
             self.pedido_controller.registrar_pedido(pedido, itens_pedido)
             messagebox.showinfo("Sucesso", "Pedido foi registrado com sucesso!")
+        except ValueError as ve:
+            messagebox.showerror("Erro", str(ve))
         except Exception as e:
             messagebox.showerror("Erro", f"Erro ao registrar o pedido {str(e)}")
 

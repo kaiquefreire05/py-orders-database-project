@@ -38,3 +38,7 @@ class ItemController:
     def excluir_item(self, id):
         query = 'DELETE FROM itens WHERE id = ?'
         self.db.execute_query(query, (id,))
+
+    def obter_item(self, item_id):
+        query = 'SELECT * FROM itens WHERE id = ?'
+        return self.db.fetch_all(query, (item_id,))
