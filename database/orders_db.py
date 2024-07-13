@@ -2,7 +2,18 @@ import sqlite3
 
 
 class Database:
+    """
+        Classe para interação com o banco de dados SQLite.
+    """
+
     def __init__(self, nome_db='orders.db'):
+        """
+            Inicializa a conexão com o banco de dados SQLite e cria as tabelas se elas não existirem.
+
+            Args:
+                nome_db (str): Nome do arquivo do banco de dados SQLite.
+
+        """
 
         # Tentando conectar com o banco de dados
         try:
@@ -13,6 +24,10 @@ class Database:
         self.create_tables()  # Criando as tabelas do banco de dados
 
     def create_tables(self):
+        """
+            Cria as tabelas do banco de dados se elas não existirem.
+        """
+
         self.cursor.execute('''
             CREATE TABLE IF NOT EXISTS itens (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -43,17 +58,51 @@ class Database:
         self.connection.commit()  # Executando a mudança
 
     def execute_query(self, query, params=()):
+        """
+            Executa uma consulta SQL que não retorna resultados.
+
+            Args:
+                query (str): A consulta SQL a ser executada.
+                params (tuple): Parâmetros para substituição na consulta SQL.
+
+        """
         self.cursor.execute(query, params)
         self.connection.commit()  # Confirmando a alteração
 
     def execute_query_with_affected_rows(self, query, params=()):
+        """
+            Executa uma consulta SQL que retorna o número de linhas afetadas.
+
+            Args:
+                query (str): A consulta SQL a ser executada.
+                params (tuple): Parâmetros para substituição na consulta SQL.
+
+            Returns:
+                int: Número de linhas afetadas pela consulta.
+
+        """
+
         self.cursor.execute(query, params)
         self.connection.commit()
         return self.cursor.rowcount  # Retornando com o número de linhas afetadas
 
     def fetch_all(self, query, params=()):
+        """
+            Executa uma consulta SQL que retorna todas as linhas de resultado.
+
+            Args:
+                query (str): A consulta SQL a ser executada.
+                params (tuple): Parâmetros para substituição na consulta SQL.
+
+            Returns:
+                list: Lista contendo todas as linhas de resultado da consulta.
+
+        """
         self.cursor.execute(query, params)
         return self.cursor.fetchall()
 
     def close_connection(self):
+        """
+            Fecha a conexão com o banco de dados.
+        """
         self.connection.close()

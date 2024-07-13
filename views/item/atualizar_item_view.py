@@ -5,15 +5,35 @@ from models.item import Item
 
 
 class AtualizarItemView:
+    """
+        Classe para criar uma interface gráfica para atualizar itens.
+
+        Atributos:
+            root (tk.TK): A janela principal para a visualização de atualização de item.
+            main_root (tk.TK): Referência à janela principal da aplicação.
+            item_controller (ItemController): O controlador para gerenciar dados de item.
+    """
     def __init__(self, root, main_root):
+        """
+            Inicializa a instância AtualizarItemView.
+
+            Args:
+                root (tk.TK): A janela principal para a visualização de atualização de item.
+                main_root (tk.TK): Referência à janela principal da aplicação.
+        """
         self.root = root
         self.main_root = main_root
-        self.item_controller = ItemController()
+        self.item_controller = ItemController()  # Controlador dos itens
         self.root.title("Atualizar item")
-        self.root.geometry("400x400")
+        self.root.geometry("600x500")
         self.create_widgets()
 
     def create_widgets(self):
+        """
+            Cria os widgets para a visualização de atualização de item.
+
+            Este método configura o layout em grid e cria rótulos, campos de entrada e botões para interação do usuário.
+        """
 
         # Configurando o grid para ter alinhamento
         self.root.grid_columnconfigure(0, weight=1)
@@ -49,6 +69,12 @@ class AtualizarItemView:
         tk.Button(self.root, text="Voltar", command=self.voltar).grid(row=6, column=0, columnspan=2)
 
     def atualizar_item(self):
+        """
+            Tenta atualizar um item com base na entrada do usuário.
+
+            Este método recupera dados dos campo de entrada, valida-os e chama o (ItemController) para atualizar o item.
+            Em caso de erros, exibe uma mensagem de erro.
+        """
         try:
             id = int(self.entrada_id.get())
             nome = self.entrada_nome.get()
@@ -63,5 +89,10 @@ class AtualizarItemView:
             messagebox.showerror("Erro!", "Insira valores válidos nos campos!")
 
     def voltar(self):
+        """
+            Retorna à janela anterior da aplicação.
+
+            Este método fecha a janela atual e torna visível novamente a janela principal da aplicação.
+        """
         self.root.destroy()
         self.main_root.deiconify()

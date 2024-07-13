@@ -8,18 +8,40 @@ from models.item_pedido import ItemPedido
 
 
 class CadastroPedidoView:
+    """
+        View para cadastrar novos pedidos.
+
+        Attributes:
+            root (tk.TK): Janela principal da aplicação.
+            main_root (tk.TK): Referência à janela principal para retornar após fechar esta view.
+            pedido_controller (PedidoController): Controlador de pedidos para interação com o modelo e banco de dados.
+            item_controller (ItemController): Controlador de itens para interação com o modelo e banco de dados.
+            itens_pedido (list): Lista de itens a serem registrados no pedido.
+            entry_data_pedido (DateEntry): Campo de entrada para a data do pedido.
+    """
     def __init__(self, root, main_root):
+        """
+            Inicializa a view de cadastro de pedidos.
+
+            Args:
+                root (tk.TK): Janela principal da aplicação.
+                main_root (tk.TK): Referência à janela principal para retornar após fechar esta view.
+        """
         self.root = root
         self.main_root = main_root
-        self.pedido_controller = PedidoController()
-        self.item_controller = ItemController()
+        self.pedido_controller = PedidoController()  # Controller de pedidos
+        self.item_controller = ItemController()  # Controller de itens
         self.root.title("Cadastro de Pedido")
-        self.root.geometry("400x400")
-        self.itens_pedido = list()
+        self.root.geometry("600x500")
+        self.itens_pedido = list()  # Lista de itens para serem registrados
         self.create_widgets()
 
     def create_widgets(self):
+        """
+            Cria os widgets na janela de cadastro de pedidos.
+        """
 
+        # Configurando as colunas
         self.root.grid_columnconfigure(0, weight=1)
         self.root.grid_columnconfigure(1, weight=1)
 
@@ -39,8 +61,12 @@ class CadastroPedidoView:
         tk.Button(self.root, text="Voltar", command=self.voltar).grid(row=4, column=0, columnspan=2, pady=10)
 
     def adicionar_item_frame(self):
+        """
+            Adiciona um novo item ao frame de itens do pedido.
+        """
         row = len(self.itens_pedido)  # Qtde de linhas nos itens pedido
 
+        # Inserindo tudo no (frame_itens)
         entry_item_id = tk.Entry(self.frame_itens)
         entry_item_id.grid(row=row, column=0, padx=5, pady=5)
         self.set_placeholder(entry_item_id, "Item ID")
@@ -56,6 +82,13 @@ class CadastroPedidoView:
 
     @staticmethod
     def set_placeholder(entry, placeholder):
+        """
+            Define um placeholder para um campo de entrada.
+
+            Args:
+                entry (tk.Entry): Campo de entrada ao qual será adicionado o placeholder.
+                placeholder (str): Texto placeholder a ser exibido quando o campo está vazio.
+        """
         # Função para lidar com o evento de foco no campo de entrada
         def on_focus_in(event):
             # Verifica se o texto atual é igual ao placeholder
@@ -81,16 +114,27 @@ class CadastroPedidoView:
         entry.bind('<FocusOut>', on_focus_out)
 
     def remover_item_frame(self, row):
+        """
+           Remove um item do frame de itens do pedido.
+
+           Args:
+               row (int): Índice da linha do item a ser removido.
+        """
         for widget in self.itens_pedido[row]:
             widget.grid_forget()
         self.itens_pedido[row] = None  # Marcando a posição como None
 
     def registrar_pedido(self):
+        """
+           Registra o pedido com os itens informados.
+        """
+
         # Obtém os valores dos campos de entrada
         data_pedido = self.entry_data_pedido.get()
         pedido = Pedido(data_pedido)
 
         itens_pedido = []  # Lista para armazenar os itens do pedido
+
         # Iterando sobre cada posição da tupla
         for item_widgets in self.itens_pedido:
             if item_widgets:
@@ -108,6 +152,7 @@ class CadastroPedidoView:
 
                     item_pedido = ItemPedido(item_id, qtde_item, data_pedido)  # Criando objeto ItemPedido
                     itens_pedido.append(item_pedido)  # Adicionado na lista de itens de pedido
+
                 # Se na tentativa ocorrer erro, lança exceção
                 except ValueError:
                     messagebox.showerror("Erro", "IDs e quantidade precisam ser inteiros")
@@ -128,5 +173,8 @@ class CadastroPedidoView:
             messagebox.showerror("Erro", f"Erro ao registrar o pedido {str(e)}")
 
     def voltar(self):
+        """
+            Fecha a janela de cadastro de pedido e retorna à janela principal.
+        """
         self.root.destroy()  # Fecha a janela de registro de pedido
         self.main_root.deiconify()  # Reexibe a janela principal

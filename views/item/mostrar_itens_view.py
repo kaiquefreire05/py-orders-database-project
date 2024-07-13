@@ -7,11 +7,12 @@ class MostrarItens:
         self.root = root
         self.main_root = main_root
         self.root.title("Mostrar itens cadastrados")
-        self.root.geometry("400x400")
-        self.item_controller = ItemController()
+        self.root.geometry("600x500")
+        self.item_controller = ItemController()  # Controlador de itens
         self.create_widgets()
 
     def create_widgets(self):
+
         # Configurar as colunas para garantir centralização
         self.root.grid_columnconfigure(0, weight=1)
         self.root.grid_columnconfigure(1, weight=1)
@@ -31,10 +32,15 @@ class MostrarItens:
     def mostrar_itens(self):
         # Limpando a listbox
         self.listbox_itens.delete(0, tk.END)
-        itens = self.item_controller.listar_todos()
-        for item in itens:
-            self.listbox_itens.insert(tk.END, f'ID: {item[0]}, Nome: {item[1]}, Descrição: {item[2]}'
-                                              f', Preço: {item[3]}, Quantidade: {item[4]}')
+
+        itens = self.item_controller.listar_todos()  # Obtendo todos os itens
+        if not itens:  # Se não existir itens
+            self.listbox_itens.insert(tk.END, "Não tem nenhum item registrado.")
+        else:
+            # Mostrando todos os itens na list box
+            for item in itens:
+                self.listbox_itens.insert(tk.END, f'ID: {item[0]}, Nome: {item[1]}, Descrição: {item[2]}'
+                                                  f', Preço: {item[3]}, Quantidade: {item[4]}')
 
     def voltar(self):
         self.root.destroy()
